@@ -7,3 +7,4 @@ MinesweeperBinary
 .DS_Store
 *.swp
 *~
+.codemaker/
