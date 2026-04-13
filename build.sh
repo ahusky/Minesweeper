@@ -55,7 +55,7 @@ cat > "$APP_DIR/Contents/Info.plist" << 'EOF'
     <key>CFBundleExecutable</key>
     <string>Minesweeper</string>
     <key>CFBundleIdentifier</key>
-    <string>com.example.Minesweeper</string>
+    <string>com.yuyang.Minesweeper</string>
     <key>CFBundleName</key>
     <string>Minesweeper</string>
     <key>CFBundleDisplayName</key>
