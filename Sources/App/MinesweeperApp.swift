@@ -5,10 +5,11 @@ struct MinesweeperApp: App {
     @StateObject private var game = GameModel(difficulty: .beginner)
     @StateObject private var statistics = GameStatistics.shared
     @State private var showStatistics = false
+    @State private var showHelp = false
 
     var body: some Scene {
         WindowGroup {
-            MainGameView(game: game, statistics: statistics, showStatistics: $showStatistics)
+            MainGameView(game: game, statistics: statistics, showStatistics: $showStatistics, showHelp: $showHelp)
         }
         .windowStyle(.titleBar)
         .windowResizability(.contentSize)
@@ -46,6 +47,14 @@ struct MinesweeperApp: App {
                 }
                 .keyboardShortcut("s", modifiers: [.command, .shift])
             }
+            
+            // 帮助菜单
+            CommandGroup(replacing: .help) {
+                Button("Minesweeper Help") {
+                    showHelp = true
+                }
+                .keyboardShortcut("?", modifiers: .command)
+            }
         }
     }
 }
@@ -55,6 +64,7 @@ struct MainGameView: View {
     @ObservedObject var game: GameModel
     @ObservedObject var statistics: GameStatistics
     @Binding var showStatistics: Bool
+    @Binding var showHelp: Bool
     
     private let cellSize: CGFloat = 24
     
@@ -93,6 +103,15 @@ struct MainGameView: View {
                 
                 Spacer()
                 
+                // 帮助按钮
+                Button(action: { showHelp = true }) {
+                    Image(systemName: "questionmark.circle")
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+                }
+                .buttonStyle(.plain)
+                .help("Help (⌘?)")
+                
                 // 统计按钮
                 Button(action: { showStatistics = true }) {
                     Image(systemName: "chart.bar.fill")
@@ -124,6 +143,9 @@ struct MainGameView: View {
         .navigationTitle(windowTitle)
         .sheet(isPresented: $showStatistics) {
             StatisticsView(statistics: statistics)
+        }
+        .sheet(isPresented: $showHelp) {
+            HelpView()
         }
     }
     
