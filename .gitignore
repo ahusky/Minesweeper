@@ -1,0 +1,9 @@
+# 构建产物
+build/
+*.icns
+MinesweeperBinary
+
+# macOS
+.DS_Store
+*.swp
+*~
