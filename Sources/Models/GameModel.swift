@@ -297,6 +297,9 @@ class GameModel: ObservableObject {
         gameState = .lost
         stopTimer()
         
+        // 记录统计
+        GameStatistics.shared.recordLoss(difficulty: difficulty, time: elapsedTime)
+        
         // 显示所有地雷，标记错误的旗子
         for r in 0..<rows {
             for c in 0..<cols {
@@ -322,6 +325,9 @@ class GameModel: ObservableObject {
         
         gameState = .won
         stopTimer()
+        
+        // 记录统计
+        GameStatistics.shared.recordWin(difficulty: difficulty, time: elapsedTime)
         
         // 自动标记所有未标记的地雷
         for r in 0..<rows {

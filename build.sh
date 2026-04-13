@@ -12,8 +12,10 @@ swiftc -parse-as-library \
     -O \
     -o MinesweeperBinary \
     Sources/Models/GameModel.swift \
+    Sources/Models/GameStatistics.swift \
     Sources/Views/HeaderView.swift \
     Sources/Views/GameBoardView.swift \
+    Sources/Views/StatisticsView.swift \
     Sources/App/MinesweeperApp.swift
 
 # 创建 .app bundle

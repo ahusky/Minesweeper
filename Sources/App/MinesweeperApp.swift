@@ -3,15 +3,19 @@ import SwiftUI
 @main
 struct MinesweeperApp: App {
     @StateObject private var game = GameModel(difficulty: .beginner)
+    @StateObject private var statistics = GameStatistics.shared
+    @State private var showStatistics = false
 
     var body: some Scene {
         WindowGroup {
-            MainGameView(game: game)
+            MainGameView(game: game, statistics: statistics, showStatistics: $showStatistics)
         }
         .windowStyle(.titleBar)
         .windowResizability(.contentSize)
         .commands {
             CommandGroup(replacing: .newItem) { }
+            
+            // 游戏菜单
             CommandMenu("Game") {
                 Button("New Game") {
                     game.newGame()
@@ -34,6 +38,13 @@ struct MinesweeperApp: App {
                     }
                     .keyboardShortcut(KeyEquivalent(Character("\(index + 1)")), modifiers: .command)
                 }
+                
+                Divider()
+                
+                Button("Statistics...") {
+                    showStatistics = true
+                }
+                .keyboardShortcut("s", modifiers: [.command, .shift])
             }
         }
     }
@@ -42,6 +53,8 @@ struct MinesweeperApp: App {
 // MARK: - 主游戏视图
 struct MainGameView: View {
     @ObservedObject var game: GameModel
+    @ObservedObject var statistics: GameStatistics
+    @Binding var showStatistics: Bool
     
     private let cellSize: CGFloat = 24
     
@@ -69,14 +82,27 @@ struct MainGameView: View {
                 ForEach(Difficulty.allCases, id: \.self) { difficulty in
                     DifficultyButton(
                         difficulty: difficulty,
-                        isSelected: game.difficulty == difficulty
+                        isSelected: game.difficulty == difficulty,
+                        bestTime: statistics.stats(for: difficulty).bestTime
                     ) {
                         withAnimation(.easeInOut(duration: 0.15)) {
                             game.changeDifficulty(difficulty)
                         }
                     }
                 }
+                
+                Spacer()
+                
+                // 统计按钮
+                Button(action: { showStatistics = true }) {
+                    Image(systemName: "chart.bar.fill")
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+                }
+                .buttonStyle(.plain)
+                .help("Statistics (⇧⌘S)")
             }
+            .padding(.horizontal, 8)
             .padding(.vertical, 8)
 
             // 顶部信息栏
@@ -96,6 +122,9 @@ struct MainGameView: View {
         .background(Color(nsColor: .controlColor))
         .fixedSize()
         .navigationTitle(windowTitle)
+        .sheet(isPresented: $showStatistics) {
+            StatisticsView(statistics: statistics)
+        }
     }
     
     private var borderColor: Color {
@@ -114,6 +143,7 @@ struct MainGameView: View {
 struct DifficultyButton: View {
     let difficulty: Difficulty
     let isSelected: Bool
+    let bestTime: Int?
     let action: () -> Void
     
     @State private var isHovered = false
@@ -127,10 +157,13 @@ struct DifficultyButton: View {
                 HStack(spacing: 3) {
                     Text("\(difficulty.cols)×\(difficulty.rows)")
                         .font(.system(size: 9))
-                    Text("·")
-                        .font(.system(size: 9))
-                    Text("\(difficulty.mines)💣")
-                        .font(.system(size: 9))
+                    
+                    if let best = bestTime {
+                        Text("·")
+                            .font(.system(size: 9))
+                        Text("🏆\(best)s")
+                            .font(.system(size: 9))
+                    }
                 }
                 .foregroundColor(isSelected ? .white.opacity(0.85) : .secondary)
             }
