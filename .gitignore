@@ -15,3 +15,7 @@ xcuserdata/
 
 # Xcode project
 *.xcodeproj/
+
+# Xcode resources
+*.xcassets/
+*.entitlements
