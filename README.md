@@ -1,5 +1,9 @@
 # 💣 扫雷Lite
 
+<p align="center">
+  <img src="ScreenShot.png" alt="扫雷Lite" width="400">
+</p>
+
 经典的 Windows 扫雷游戏 macOS 复刻版，使用 SwiftUI + AppKit 开发。
 
 ## ✨ 功能特性
