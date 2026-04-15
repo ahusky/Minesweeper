@@ -1,51 +1,51 @@
-# Privacy Policy for Minesweeper
+# 扫雷Lite 隐私政策
 
-**Last Updated: April 13, 2026**
+**最后更新日期：2026年4月15日**
 
-## Overview
+## 概述
 
-Minesweeper ("the App") is developed by yuyang. This Privacy Policy explains how we handle information when you use our App.
+扫雷Lite（"本应用"）由 yuyang 开发。本隐私政策说明了您使用本应用时我们如何处理信息。
 
-## Information We Collect
+## 我们收集的信息
 
-**We do not collect any personal information.**
+**我们不收集任何个人信息。**
 
-The App is a standalone game that runs entirely on your device. We do not:
+本应用是一款完全在您设备上运行的单机游戏。我们不会：
 
-- Collect personal data
-- Track your location
-- Access your contacts, photos, or other personal files
-- Use analytics or tracking tools
-- Send any data to external servers
-- Require user registration or login
+- 收集个人数据
+- 追踪您的位置
+- 访问您的通讯录、照片或其他个人文件
+- 使用分析或追踪工具
+- 向外部服务器发送任何数据
+- 要求用户注册或登录
 
-## Data Storage
+## 数据存储
 
-The App stores the following data **locally on your device only**:
+本应用仅在**您的设备本地**存储以下数据：
 
-- **Game Statistics**: Number of games played, win/loss records, best times, and streaks
-- **User Preferences**: Selected difficulty level
+- **游戏统计**：游戏局数、胜负记录、最佳时间和连胜/连败记录
+- **用户偏好**：所选难度等级
 
-This data is stored using macOS's standard UserDefaults system and never leaves your device.
+这些数据使用 macOS 标准的 UserDefaults 系统存储，永远不会离开您的设备。
 
-## Third-Party Services
+## 第三方服务
 
-The App does not integrate with any third-party services, advertising networks, or analytics platforms.
+本应用不集成任何第三方服务、广告网络或分析平台。
 
-## Children's Privacy
+## 儿童隐私
 
-The App does not collect any personal information from anyone, including children under 13 years of age.
+本应用不收集任何人的个人信息，包括13岁以下的儿童。
 
-## Changes to This Policy
+## 政策变更
 
-We may update this Privacy Policy from time to time. Any changes will be reflected in the "Last Updated" date at the top of this document.
+我们可能会不时更新本隐私政策。任何变更都会反映在本文档顶部的"最后更新日期"中。
 
-## Contact Us
+## 联系我们
 
-If you have any questions about this Privacy Policy, please contact us at:
+如果您对本隐私政策有任何疑问，请通过以下方式联系我们：
 
 - GitHub: https://github.com/ahusky/Minesweeper
 
-## Summary
+## 总结
 
-🔒 **Your privacy is fully protected** — this App collects zero personal data and works completely offline.
+🔒 **您的隐私受到完全保护** — 本应用不收集任何个人数据，完全离线运行。

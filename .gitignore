@@ -8,3 +8,7 @@ MinesweeperBinary
 *.swp
 *~
 .codemaker/
+
+# Xcode user data
+*.xcuserstate
+xcuserdata/

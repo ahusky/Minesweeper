@@ -173,13 +173,13 @@ struct StatisticsView: View {
     }
     
     // MARK: - Helper Methods
-    private func formatTime(_ seconds: Int) -> String {
+    private func formatTime(_ seconds: Double) -> String {
         if seconds < 60 {
-            return "\(seconds)秒"
+            return String(format: "%.1f秒", seconds)
         } else {
-            let mins = seconds / 60
-            let secs = seconds % 60
-            return "\(mins)分\(secs)秒"
+            let mins = Int(seconds) / 60
+            let secs = seconds.truncatingRemainder(dividingBy: 60)
+            return String(format: "%d分%.1f秒", mins, secs)
         }
     }
     

@@ -71,10 +71,12 @@ class GameModel: ObservableObject {
     // MARK: Published Properties
     @Published var cells: [[Cell]] = []
     @Published var gameState: GameState = .ready
-    @Published var elapsedTime: Int = 0
+    @Published var elapsedTime: Double = 0  // 精确到 0.1 秒
     @Published var flagCount: Int = 0
     @Published var difficulty: Difficulty = .beginner
     @Published var isMouseDown: Bool = false
+    @Published var isNewTodayRecord: Bool = false
+    @Published var isNewAllTimeRecord: Bool = false
 
     // MARK: Computed Properties
     var rows: Int { difficulty.rows }
@@ -326,8 +328,16 @@ class GameModel: ObservableObject {
         gameState = .won
         stopTimer()
         
+        // 检测是否打破记录（在记录之前检测）
+        let leaderboard = LeaderboardManager.shared
+        isNewAllTimeRecord = leaderboard.isNewAllTimeRecord(difficulty: difficulty, time: elapsedTime)
+        isNewTodayRecord = leaderboard.isNewTodayRecord(difficulty: difficulty, time: elapsedTime)
+        
         // 记录统计
         GameStatistics.shared.recordWin(difficulty: difficulty, time: elapsedTime)
+        
+        // 记录到排行榜
+        leaderboard.recordGame(difficulty: difficulty, time: elapsedTime, isWin: true)
         
         // 自动标记所有未标记的地雷
         for r in 0..<rows {
@@ -344,10 +354,10 @@ class GameModel: ObservableObject {
     
     private func startTimer() {
         guard timer == nil else { return }  // 防止重复启动
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
             guard let self = self else { return }
-            guard self.gameState == .playing, self.elapsedTime < 999 else { return }
-            self.elapsedTime += 1
+            guard self.gameState == .playing, self.elapsedTime < 999.9 else { return }
+            self.elapsedTime += 0.1
         }
     }
     

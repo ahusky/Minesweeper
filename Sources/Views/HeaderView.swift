@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: - LED 数字显示器
+// MARK: - LED 数字显示器（整数）
 struct LEDDisplay: View {
     let value: Int
     let digits: Int
@@ -22,16 +22,54 @@ struct LEDDisplay: View {
     var body: some View {
         HStack(spacing: 1) {
             ForEach(Array(displayText.suffix(digits).enumerated()), id: \.offset) { _, char in
-                Text(String(char))
-                    .font(.system(size: 24, weight: .bold, design: .monospaced))
-                    .foregroundColor(Color(red: 1.0, green: 0.15, blue: 0.15))
-                    .frame(width: 17, height: 30)
-                    .background(Color(red: 0.2, green: 0.02, blue: 0.02))
+                LEDDigit(char: char)
             }
         }
         .padding(3)
         .background(Color.black)
         .cornerRadius(2)
+    }
+}
+
+// MARK: - LED 时间显示器（精确到0.1秒）
+struct LEDTimeDisplay: View {
+    let value: Double
+    
+    private var displayText: String {
+        let clamped = max(0, min(999.9, value))
+        return String(format: "%05.1f", clamped)  // 例如: "012.3"
+    }
+    
+    var body: some View {
+        HStack(spacing: 1) {
+            ForEach(Array(displayText.enumerated()), id: \.offset) { _, char in
+                if char == "." {
+                    Text(".")
+                        .font(.system(size: 24, weight: .bold, design: .monospaced))
+                        .foregroundColor(Color(red: 1.0, green: 0.15, blue: 0.15))
+                        .frame(width: 8, height: 30)
+                        .background(Color(red: 0.2, green: 0.02, blue: 0.02))
+                } else {
+                    LEDDigit(char: char)
+                }
+            }
+        }
+        .padding(3)
+        .background(Color.black)
+        .cornerRadius(2)
+    }
+}
+
+// MARK: - 单个 LED 数字
+struct LEDDigit: View {
+    let char: Character
+    
+    var body: some View {
+        Text(String(char))
+            .font(.system(size: 24, weight: .bold, design: .monospaced))
+            .foregroundColor(Color(red: 1.0, green: 0.15, blue: 0.15))
+            .frame(width: 17, height: 30)
+            .background(Color(red: 0.2, green: 0.02, blue: 0.02))
     }
 }
 
@@ -114,8 +152,8 @@ struct HeaderView: View {
             
             Spacer()
             
-            // 计时器
-            LEDDisplay(game.elapsedTime)
+            // 计时器（精确到0.1秒）
+            LEDTimeDisplay(value: game.elapsedTime)
                 .help("Time Elapsed")
         }
         .padding(.horizontal, 8)

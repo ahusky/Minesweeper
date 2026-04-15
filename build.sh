@@ -13,14 +13,16 @@ swiftc -parse-as-library \
     -o MinesweeperBinary \
     Sources/Models/GameModel.swift \
     Sources/Models/GameStatistics.swift \
+    Sources/Models/LeaderboardManager.swift \
     Sources/Views/HeaderView.swift \
     Sources/Views/GameBoardView.swift \
     Sources/Views/StatisticsView.swift \
     Sources/Views/HelpView.swift \
+    Sources/Views/LeaderboardView.swift \
     Sources/App/MinesweeperApp.swift
 
 # 创建 .app bundle
-APP_DIR="build/Minesweeper.app"
+APP_DIR="build/扫雷Lite.app"
 rm -rf build
 mkdir -p "$APP_DIR/Contents/MacOS"
 mkdir -p "$APP_DIR/Contents/Resources"
@@ -57,9 +59,9 @@ cat > "$APP_DIR/Contents/Info.plist" << 'EOF'
     <key>CFBundleIdentifier</key>
     <string>com.yuyang.Minesweeper</string>
     <key>CFBundleName</key>
-    <string>Minesweeper</string>
+    <string>扫雷Lite</string>
     <key>CFBundleDisplayName</key>
-    <string>Minesweeper</string>
+    <string>扫雷Lite</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>

@@ -5,8 +5,8 @@ struct DifficultyStats: Codable, Equatable {
     var gamesPlayed: Int = 0
     var gamesWon: Int = 0
     var gamesLost: Int = 0
-    var bestTime: Int? = nil  // 最快完成时间（秒）
-    var totalTime: Int = 0     // 总游戏时间（秒）
+    var bestTime: Double? = nil  // 最快完成时间（秒，精确到0.1秒）
+    var totalTime: Double = 0     // 总游戏时间（秒）
     var currentWinStreak: Int = 0
     var longestWinStreak: Int = 0
     var currentLoseStreak: Int = 0
@@ -18,13 +18,13 @@ struct DifficultyStats: Codable, Equatable {
         return Double(gamesWon) / Double(gamesPlayed) * 100
     }
     
-    var averageTime: Int? {
+    var averageTime: Double? {
         guard gamesWon > 0 else { return nil }
-        return totalTime / gamesWon
+        return totalTime / Double(gamesWon)
     }
     
     // 记录一局胜利
-    mutating func recordWin(time: Int) {
+    mutating func recordWin(time: Double) {
         gamesPlayed += 1
         gamesWon += 1
         totalTime += time
@@ -43,7 +43,7 @@ struct DifficultyStats: Codable, Equatable {
     }
     
     // 记录一局失败
-    mutating func recordLoss(time: Int) {
+    mutating func recordLoss(time: Double) {
         gamesPlayed += 1
         gamesLost += 1
         
@@ -83,7 +83,7 @@ class GameStatistics: ObservableObject {
         }
     }
     
-    func recordWin(difficulty: Difficulty, time: Int) {
+    func recordWin(difficulty: Difficulty, time: Double) {
         switch difficulty {
         case .beginner:
             beginnerStats.recordWin(time: time)
@@ -95,7 +95,7 @@ class GameStatistics: ObservableObject {
         save()
     }
     
-    func recordLoss(difficulty: Difficulty, time: Int) {
+    func recordLoss(difficulty: Difficulty, time: Double) {
         switch difficulty {
         case .beginner:
             beginnerStats.recordLoss(time: time)

@@ -4,12 +4,21 @@ import SwiftUI
 struct MinesweeperApp: App {
     @StateObject private var game = GameModel(difficulty: .beginner)
     @StateObject private var statistics = GameStatistics.shared
+    @StateObject private var leaderboard = LeaderboardManager.shared
     @State private var showStatistics = false
     @State private var showHelp = false
+    @State private var showLeaderboard = false
 
     var body: some Scene {
         WindowGroup {
-            MainGameView(game: game, statistics: statistics, showStatistics: $showStatistics, showHelp: $showHelp)
+            MainGameView(
+                game: game,
+                statistics: statistics,
+                leaderboard: leaderboard,
+                showStatistics: $showStatistics,
+                showHelp: $showHelp,
+                showLeaderboard: $showLeaderboard
+            )
         }
         .windowStyle(.titleBar)
         .windowResizability(.contentSize)
@@ -42,6 +51,11 @@ struct MinesweeperApp: App {
                 
                 Divider()
                 
+                Button("Leaderboard...") {
+                    showLeaderboard = true
+                }
+                .keyboardShortcut("l", modifiers: .command)
+                
                 Button("Statistics...") {
                     showStatistics = true
                 }
@@ -50,7 +64,7 @@ struct MinesweeperApp: App {
             
             // 帮助菜单
             CommandGroup(replacing: .help) {
-                Button("Minesweeper Help") {
+                Button("扫雷Lite 帮助") {
                     showHelp = true
                 }
                 .keyboardShortcut("?", modifiers: .command)
@@ -63,8 +77,12 @@ struct MinesweeperApp: App {
 struct MainGameView: View {
     @ObservedObject var game: GameModel
     @ObservedObject var statistics: GameStatistics
+    @ObservedObject var leaderboard: LeaderboardManager
     @Binding var showStatistics: Bool
     @Binding var showHelp: Bool
+    @Binding var showLeaderboard: Bool
+    
+    @State private var showRecordCelebration = false
     
     private let cellSize: CGFloat = 24
     
@@ -75,83 +93,143 @@ struct MainGameView: View {
     private var windowTitle: String {
         switch game.gameState {
         case .ready:
-            return "Minesweeper - \(game.difficulty.rawValue)"
+            return "扫雷Lite - \(game.difficulty.rawValue)"
         case .playing:
-            return "Minesweeper - Playing..."
+            return "扫雷Lite - 游戏中..."
         case .won:
-            return "Minesweeper - 🎉 Victory! \(game.elapsedTime)s"
+            let timeStr = String(format: "%.1f", game.elapsedTime)
+            if game.isNewAllTimeRecord {
+                return "扫雷Lite - 🏆 新纪录! \(timeStr)s"
+            } else if game.isNewTodayRecord {
+                return "扫雷Lite - ⭐ 今日最佳! \(timeStr)s"
+            }
+            return "扫雷Lite - 🎉 胜利! \(timeStr)s"
         case .lost:
-            return "Minesweeper - 💥 Game Over"
+            return "扫雷Lite - 💥 失败"
         }
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            // 难度选择栏
-            HStack(spacing: 4) {
-                ForEach(Difficulty.allCases, id: \.self) { difficulty in
-                    DifficultyButton(
-                        difficulty: difficulty,
-                        isSelected: game.difficulty == difficulty,
-                        bestTime: statistics.stats(for: difficulty).bestTime
-                    ) {
-                        withAnimation(.easeInOut(duration: 0.15)) {
-                            game.changeDifficulty(difficulty)
+        ZStack {
+            VStack(spacing: 0) {
+                // 难度选择栏
+                HStack(spacing: 4) {
+                    ForEach(Difficulty.allCases, id: \.self) { difficulty in
+                        DifficultyButton(
+                            difficulty: difficulty,
+                            isSelected: game.difficulty == difficulty
+                        ) {
+                            withAnimation(.easeInOut(duration: 0.15)) {
+                                game.changeDifficulty(difficulty)
+                            }
                         }
                     }
+                    
+                    Spacer()
+                    
+                    // 排行榜按钮
+                    Button(action: { showLeaderboard = true }) {
+                        Image(systemName: "trophy")
+                            .font(.system(size: 14))
+                            .foregroundColor(.secondary)
+                    }
+                    .buttonStyle(.plain)
+                    .help("Leaderboard (⌘L)")
+                    
+                    // 帮助按钮
+                    Button(action: { showHelp = true }) {
+                        Image(systemName: "questionmark.circle")
+                            .font(.system(size: 14))
+                            .foregroundColor(.secondary)
+                    }
+                    .buttonStyle(.plain)
+                    .help("Help (⌘?)")
+                    
+                    // 统计按钮
+                    Button(action: { showStatistics = true }) {
+                        Image(systemName: "chart.bar.fill")
+                            .font(.system(size: 14))
+                            .foregroundColor(.secondary)
+                    }
+                    .buttonStyle(.plain)
+                    .help("Statistics (⇧⌘S)")
                 }
-                
-                Spacer()
-                
-                // 帮助按钮
-                Button(action: { showHelp = true }) {
-                    Image(systemName: "questionmark.circle")
-                        .font(.system(size: 14))
-                        .foregroundColor(.secondary)
-                }
-                .buttonStyle(.plain)
-                .help("Help (⌘?)")
-                
-                // 统计按钮
-                Button(action: { showStatistics = true }) {
-                    Image(systemName: "chart.bar.fill")
-                        .font(.system(size: 14))
-                        .foregroundColor(.secondary)
-                }
-                .buttonStyle(.plain)
-                .help("Statistics (⇧⌘S)")
+                .padding(.horizontal, 8)
+                .padding(.vertical, 8)
+
+                // 顶部信息栏
+                HeaderView(game: game)
+                    .frame(width: boardWidth)
+                    .padding(.bottom, 6)
+
+                // 游戏面板 + 状态边框
+                GameBoardView(game: game)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 1)
+                            .strokeBorder(borderColor, lineWidth: 3)
+                            .animation(.easeInOut(duration: 0.3), value: game.gameState)
+                    )
             }
-            .padding(.horizontal, 8)
-            .padding(.vertical, 8)
-
-            // 顶部信息栏
-            HeaderView(game: game)
-                .frame(width: boardWidth)
-                .padding(.bottom, 6)
-
-            // 游戏面板 + 状态边框
-            GameBoardView(game: game)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 1)
-                        .strokeBorder(borderColor, lineWidth: 3)
-                        .animation(.easeInOut(duration: 0.3), value: game.gameState)
+            .padding(10)
+            .background(Color(nsColor: .controlColor))
+            
+            // 新纪录庆祝弹窗
+            if showRecordCelebration && (game.isNewTodayRecord || game.isNewAllTimeRecord) {
+                Color.black.opacity(0.3)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        withAnimation {
+                            showRecordCelebration = false
+                        }
+                    }
+                
+                NewRecordCelebration(
+                    isNewTodayRecord: game.isNewTodayRecord,
+                    isNewAllTimeRecord: game.isNewAllTimeRecord,
+                    time: game.elapsedTime
                 )
+                .transition(.scale.combined(with: .opacity))
+                .onTapGesture {
+                    withAnimation {
+                        showRecordCelebration = false
+                    }
+                }
+            }
         }
-        .padding(10)
-        .background(Color(nsColor: .controlColor))
         .fixedSize()
         .navigationTitle(windowTitle)
+        .onChange(of: game.gameState) { oldValue, newValue in
+            if newValue == .won && (game.isNewTodayRecord || game.isNewAllTimeRecord) {
+                withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+                    showRecordCelebration = true
+                }
+                // 3秒后自动关闭
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    withAnimation {
+                        showRecordCelebration = false
+                    }
+                }
+            }
+        }
         .sheet(isPresented: $showStatistics) {
             StatisticsView(statistics: statistics)
         }
         .sheet(isPresented: $showHelp) {
             HelpView()
         }
+        .sheet(isPresented: $showLeaderboard) {
+            LeaderboardView(leaderboard: leaderboard)
+        }
     }
     
     private var borderColor: Color {
         switch game.gameState {
         case .won:
+            if game.isNewAllTimeRecord {
+                return Color.yellow.opacity(0.9)
+            } else if game.isNewTodayRecord {
+                return Color.orange.opacity(0.8)
+            }
             return Color.green.opacity(0.8)
         case .lost:
             return Color.red.opacity(0.6)
@@ -165,7 +243,6 @@ struct MainGameView: View {
 struct DifficultyButton: View {
     let difficulty: Difficulty
     let isSelected: Bool
-    let bestTime: Int?
     let action: () -> Void
     
     @State private var isHovered = false
@@ -176,18 +253,9 @@ struct DifficultyButton: View {
                 Text(difficulty.rawValue)
                     .font(.system(size: 12, weight: isSelected ? .bold : .regular))
                 
-                HStack(spacing: 3) {
-                    Text("\(difficulty.cols)×\(difficulty.rows)")
-                        .font(.system(size: 9))
-                    
-                    if let best = bestTime {
-                        Text("·")
-                            .font(.system(size: 9))
-                        Text("🏆\(best)s")
-                            .font(.system(size: 9))
-                    }
-                }
-                .foregroundColor(isSelected ? .white.opacity(0.85) : .secondary)
+                Text("\(difficulty.cols)×\(difficulty.rows)")
+                    .font(.system(size: 9))
+                    .foregroundColor(isSelected ? .white.opacity(0.85) : .secondary)
             }
             .foregroundColor(isSelected ? .white : .primary)
             .padding(.horizontal, 12)
