@@ -171,7 +171,7 @@ struct MainGameView: View {
                     )
             }
             .padding(10)
-            .background(Color(nsColor: .controlColor))
+            .background(AppColors.windowBackground)
             
             // 新纪录庆祝弹窗
             if showRecordCelebration && (game.isNewTodayRecord || game.isNewAllTimeRecord) {

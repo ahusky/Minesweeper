@@ -17,6 +17,7 @@ swiftc -parse-as-library \
     Sources/Views/HeaderView.swift \
     Sources/Views/GameBoardView.swift \
     Sources/Views/StatisticsView.swift \
+    Sources/Views/AppColors.swift \
     Sources/Views/HelpView.swift \
     Sources/Views/LeaderboardView.swift \
     Sources/App/MinesweeperApp.swift
