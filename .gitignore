@@ -12,3 +12,6 @@ MinesweeperBinary
 # Xcode user data
 *.xcuserstate
 xcuserdata/
+
+# Xcode project
+*.xcodeproj/
