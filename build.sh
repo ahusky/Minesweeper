@@ -16,10 +16,9 @@ swiftc -parse-as-library \
     Sources/Models/LeaderboardManager.swift \
     Sources/Views/HeaderView.swift \
     Sources/Views/GameBoardView.swift \
-    Sources/Views/StatisticsView.swift \
+    Sources/Views/StatsCenter.swift \
     Sources/Views/AppColors.swift \
     Sources/Views/HelpView.swift \
-    Sources/Views/LeaderboardView.swift \
     Sources/App/MinesweeperApp.swift
 
 # 创建 .app bundle

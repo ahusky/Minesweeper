@@ -250,4 +250,25 @@ class LeaderboardManager: ObservableObject {
         allTimeBest = [:]
         save()
     }
+    
+    /// 清除指定难度的记录
+    func clearRecords(for difficulty: Difficulty) {
+        // 删除该难度的所有记录
+        records.removeAll { $0.difficulty == difficulty.rawValue }
+        
+        // 清除今日最佳
+        switch difficulty {
+        case .beginner:
+            todayBest.beginnerBest = nil
+        case .intermediate:
+            todayBest.intermediateBest = nil
+        case .expert:
+            todayBest.expertBest = nil
+        }
+        
+        // 清除历史最佳
+        allTimeBest.removeValue(forKey: difficulty)
+        
+        save()
+    }
 }

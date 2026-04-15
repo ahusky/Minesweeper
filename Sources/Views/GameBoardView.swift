@@ -440,7 +440,7 @@ struct GameBoardNSViewWrapper: NSViewRepresentable {
 // MARK: - SwiftUI 包装视图
 struct GameBoardView: View {
     @ObservedObject var game: GameModel
-    let cellSize: CGFloat = 24
+    let cellSize: CGFloat = 28
 
     var body: some View {
         let width = CGFloat(game.cols) * cellSize

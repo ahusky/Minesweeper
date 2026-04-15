@@ -38,8 +38,7 @@
 |--------|------|
 | `⌘N` / `Space` | 新游戏 |
 | `⌘1` / `⌘2` / `⌘3` | 切换难度 |
-| `⌘L` | 排行榜 |
-| `⇧⌘S` | 统计 |
+| `⇧⌘S` | 统计中心 |
 | `⌘?` | 帮助 |
 
 ## 🔨 编译运行
@@ -68,8 +67,8 @@ Sources/
 └── Views/
     ├── GameBoardView.swift        # 游戏面板
     ├── HeaderView.swift           # 顶部栏
-    ├── StatisticsView.swift       # 统计面板
-    ├── LeaderboardView.swift      # 排行榜
+    ├── StatsCenter.swift          # 统计中心（整合统计+排行榜）
+    ├── AppColors.swift            # 主题颜色
     └── HelpView.swift             # 帮助
 ```
 

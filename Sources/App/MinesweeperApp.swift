@@ -5,9 +5,8 @@ struct MinesweeperApp: App {
     @StateObject private var game = GameModel(difficulty: .beginner)
     @StateObject private var statistics = GameStatistics.shared
     @StateObject private var leaderboard = LeaderboardManager.shared
-    @State private var showStatistics = false
+    @State private var showStatsCenter = false
     @State private var showHelp = false
-    @State private var showLeaderboard = false
 
     var body: some Scene {
         WindowGroup {
@@ -15,9 +14,8 @@ struct MinesweeperApp: App {
                 game: game,
                 statistics: statistics,
                 leaderboard: leaderboard,
-                showStatistics: $showStatistics,
-                showHelp: $showHelp,
-                showLeaderboard: $showLeaderboard
+                showStatsCenter: $showStatsCenter,
+                showHelp: $showHelp
             )
         }
         .windowStyle(.titleBar)
@@ -51,13 +49,8 @@ struct MinesweeperApp: App {
                 
                 Divider()
                 
-                Button("Leaderboard...") {
-                    showLeaderboard = true
-                }
-                .keyboardShortcut("l", modifiers: .command)
-                
-                Button("Statistics...") {
-                    showStatistics = true
+                Button("Statistics Center...") {
+                    showStatsCenter = true
                 }
                 .keyboardShortcut("s", modifiers: [.command, .shift])
             }
@@ -78,13 +71,13 @@ struct MainGameView: View {
     @ObservedObject var game: GameModel
     @ObservedObject var statistics: GameStatistics
     @ObservedObject var leaderboard: LeaderboardManager
-    @Binding var showStatistics: Bool
+    @Binding var showStatsCenter: Bool
     @Binding var showHelp: Bool
-    @Binding var showLeaderboard: Bool
     
     @State private var showRecordCelebration = false
+    @State private var boardScale: CGFloat = 1.0
     
-    private let cellSize: CGFloat = 24
+    private let cellSize: CGFloat = 28
     
     private var boardWidth: CGFloat {
         CGFloat(game.cols) * cellSize
@@ -112,51 +105,9 @@ struct MainGameView: View {
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
-                // 难度选择栏
-                HStack(spacing: 4) {
-                    ForEach(Difficulty.allCases, id: \.self) { difficulty in
-                        DifficultyButton(
-                            difficulty: difficulty,
-                            isSelected: game.difficulty == difficulty
-                        ) {
-                            withAnimation(.easeInOut(duration: 0.15)) {
-                                game.changeDifficulty(difficulty)
-                            }
-                        }
-                    }
-                    
-                    Spacer()
-                    
-                    // 排行榜按钮
-                    Button(action: { showLeaderboard = true }) {
-                        Image(systemName: "trophy")
-                            .font(.system(size: 14))
-                            .foregroundColor(.secondary)
-                    }
-                    .buttonStyle(.plain)
-                    .help("Leaderboard (⌘L)")
-                    
-                    // 帮助按钮
-                    Button(action: { showHelp = true }) {
-                        Image(systemName: "questionmark.circle")
-                            .font(.system(size: 14))
-                            .foregroundColor(.secondary)
-                    }
-                    .buttonStyle(.plain)
-                    .help("Help (⌘?)")
-                    
-                    // 统计按钮
-                    Button(action: { showStatistics = true }) {
-                        Image(systemName: "chart.bar.fill")
-                            .font(.system(size: 14))
-                            .foregroundColor(.secondary)
-                    }
-                    .buttonStyle(.plain)
-                    .help("Statistics (⇧⌘S)")
-                }
-                .padding(.horizontal, 8)
-                .padding(.vertical, 8)
-
+                // 顶部工具栏
+                toolbarView
+                
                 // 顶部信息栏
                 HeaderView(game: game)
                     .frame(width: boardWidth)
@@ -165,10 +116,11 @@ struct MainGameView: View {
                 // 游戏面板 + 状态边框
                 GameBoardView(game: game)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 1)
+                        RoundedRectangle(cornerRadius: 2)
                             .strokeBorder(borderColor, lineWidth: 3)
                             .animation(.easeInOut(duration: 0.3), value: game.gameState)
                     )
+                    .scaleEffect(boardScale)
             }
             .padding(10)
             .background(AppColors.windowBackground)
@@ -210,16 +162,75 @@ struct MainGameView: View {
                     }
                 }
             }
+            
+            // 游戏结束时的轻微缩放动画
+            if newValue == .won || newValue == .lost {
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                    boardScale = 0.98
+                }
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.6).delay(0.15)) {
+                    boardScale = 1.0
+                }
+            }
         }
-        .sheet(isPresented: $showStatistics) {
-            StatisticsView(statistics: statistics)
+        .onChange(of: game.difficulty) { _, _ in
+            // 切换难度时的动画
+            boardScale = 0.95
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+                boardScale = 1.0
+            }
+        }
+        .sheet(isPresented: $showStatsCenter) {
+            StatsCenter(statistics: statistics, leaderboard: leaderboard)
         }
         .sheet(isPresented: $showHelp) {
             HelpView()
         }
-        .sheet(isPresented: $showLeaderboard) {
-            LeaderboardView(leaderboard: leaderboard)
+    }
+    
+    // MARK: - 工具栏视图
+    private var toolbarView: some View {
+        HStack(spacing: 6) {
+            // 难度选择按钮组
+            HStack(spacing: 4) {
+                ForEach(Difficulty.allCases, id: \.self) { difficulty in
+                    GameDifficultyButton(
+                        difficulty: difficulty,
+                        isSelected: game.difficulty == difficulty
+                    ) {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                            game.changeDifficulty(difficulty)
+                        }
+                    }
+                }
+            }
+            .padding(3)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(AppColors.controlBackground.opacity(0.5))
+            )
+            
+            Spacer()
+            
+            // 工具按钮组
+            HStack(spacing: 2) {
+                ToolbarButton(
+                    icon: "questionmark.circle",
+                    helpText: "Help (⌘?)"
+                ) {
+                    showHelp = true
+                }
+                
+                ToolbarButton(
+                    icon: "chart.bar.fill",
+                    helpText: "Statistics (⇧⌘S)"
+                ) {
+                    showStatsCenter = true
+                }
+            }
         }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 8)
     }
     
     private var borderColor: Color {
@@ -239,54 +250,119 @@ struct MainGameView: View {
     }
 }
 
-// MARK: - 难度选择按钮
-struct DifficultyButton: View {
+// MARK: - 游戏难度按钮
+struct GameDifficultyButton: View {
     let difficulty: Difficulty
     let isSelected: Bool
     let action: () -> Void
     
     @State private var isHovered = false
+    @State private var isPressed = false
+    
+    private var mineIcon: String {
+        switch difficulty {
+        case .beginner: return "🟢"
+        case .intermediate: return "🟡"
+        case .expert: return "🔴"
+        }
+    }
 
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 2) {
-                Text(difficulty.rawValue)
-                    .font(.system(size: 12, weight: isSelected ? .bold : .regular))
+            HStack(spacing: 4) {
+                Text(mineIcon)
+                    .font(.system(size: 10))
                 
-                Text("\(difficulty.cols)×\(difficulty.rows)")
-                    .font(.system(size: 9))
-                    .foregroundColor(isSelected ? .white.opacity(0.85) : .secondary)
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(difficulty.rawValue)
+                        .font(.system(size: 11, weight: isSelected ? .semibold : .regular))
+                    Text("\(difficulty.cols)×\(difficulty.rows)")
+                        .font(.system(size: 9))
+                        .foregroundColor(isSelected ? .white.opacity(0.75) : .secondary)
+                }
             }
             .foregroundColor(isSelected ? .white : .primary)
-            .padding(.horizontal, 12)
-            .padding(.vertical, 5)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
             .background(
                 RoundedRectangle(cornerRadius: 6)
-                    .fill(buttonBackgroundColor)
+                    .fill(backgroundColor)
+                    .shadow(color: isSelected ? Color.accentColor.opacity(0.3) : .clear, radius: 4, y: 2)
             )
-            .overlay(
-                RoundedRectangle(cornerRadius: 6)
-                    .strokeBorder(
-                        isHovered && !isSelected ? Color.gray.opacity(0.3) : Color.clear,
-                        lineWidth: 1
-                    )
-            )
+            .scaleEffect(isPressed ? 0.95 : 1.0)
         }
         .buttonStyle(.plain)
         .onHover { hovering in
-            withAnimation(.easeInOut(duration: 0.1)) {
+            withAnimation(.easeInOut(duration: 0.15)) {
                 isHovered = hovering
             }
         }
+        .simultaneousGesture(
+            DragGesture(minimumDistance: 0)
+                .onChanged { _ in
+                    withAnimation(.easeInOut(duration: 0.1)) {
+                        isPressed = true
+                    }
+                }
+                .onEnded { _ in
+                    withAnimation(.easeInOut(duration: 0.1)) {
+                        isPressed = false
+                    }
+                }
+        )
     }
     
-    private var buttonBackgroundColor: Color {
+    private var backgroundColor: Color {
         if isSelected {
             return Color.accentColor
         } else if isHovered {
-            return Color(nsColor: .controlBackgroundColor).opacity(0.8)
+            return AppColors.controlBackground
         } else {
             return Color.clear
         }
+    }
+}
+
+// MARK: - 工具栏按钮
+struct ToolbarButton: View {
+    let icon: String
+    let helpText: String
+    let action: () -> Void
+    
+    @State private var isHovered = false
+    @State private var isPressed = false
+    
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: icon)
+                .font(.system(size: 14, weight: .medium))
+                .foregroundStyle(isHovered ? Color.accentColor : Color.secondary)
+                .frame(width: 28, height: 28)
+                .background(
+                    RoundedRectangle(cornerRadius: 6)
+                        .fill(isHovered ? AppColors.controlBackground : Color.clear)
+                )
+                .scaleEffect(isPressed ? 0.9 : 1.0)
+        }
+        .buttonStyle(.plain)
+        .help(helpText)
+        .onHover { hovering in
+            withAnimation(.easeInOut(duration: 0.15)) {
+                isHovered = hovering
+            }
+        }
+        .simultaneousGesture(
+            DragGesture(minimumDistance: 0)
+                .onChanged { _ in
+                    withAnimation(.easeInOut(duration: 0.08)) {
+                        isPressed = true
+                    }
+                }
+                .onEnded { _ in
+                    withAnimation(.easeInOut(duration: 0.08)) {
+                        isPressed = false
+                    }
+                }
+        )
     }
 }
