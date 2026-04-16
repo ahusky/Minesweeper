@@ -57,7 +57,7 @@ cat > "$APP_DIR/Contents/Info.plist" << 'EOF'
     <key>CFBundleExecutable</key>
     <string>Minesweeper</string>
     <key>CFBundleIdentifier</key>
-    <string>com.yuyang.Minesweeper</string>
+    <string>ahusky.github.io.Minesweeper</string>
     <key>CFBundleName</key>
     <string>扫雷Lite</string>
     <key>CFBundleDisplayName</key>

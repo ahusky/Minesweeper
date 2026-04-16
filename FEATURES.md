@@ -126,7 +126,7 @@
 | 项目 | 值 |
 |------|-----|
 | 应用名称 | 扫雷Lite |
-| Bundle ID | com.yuyang.Minesweeper |
+| Bundle ID | ahusky.github.io.Minesweeper |
 | 开发语言 | Swift 5.9+ |
 | UI 框架 | SwiftUI + AppKit |
 | 绘图引擎 | CoreGraphics |
