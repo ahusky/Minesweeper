@@ -56,7 +56,7 @@ struct LEDTimeDisplay: View {
                         .font(.system(size: 24, weight: .bold, design: .monospaced))
                         .foregroundColor(Color(red: 1.0, green: 0.15, blue: 0.15))
                         .shadow(color: Color(red: 1.0, green: 0.3, blue: 0.3).opacity(0.5), radius: 4)
-                        .frame(width: 8, height: 30)
+                        .frame(width: 12, height: 30)
                         .background(Color(red: 0.15, green: 0.02, blue: 0.02))
                 } else {
                     LEDDigit(char: char)

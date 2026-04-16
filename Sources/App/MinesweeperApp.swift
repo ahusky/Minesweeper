@@ -156,7 +156,7 @@ struct MainGameView: View {
                     showRecordCelebration = true
                 }
                 // 3秒后自动关闭
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                     withAnimation {
                         showRecordCelebration = false
                     }
