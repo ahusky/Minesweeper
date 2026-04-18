@@ -1,7 +1,9 @@
 import SwiftUI
+import AppKit
 
 @main
 struct MinesweeperApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject private var game = GameModel(difficulty: .beginner)
     @StateObject private var statistics = GameStatistics.shared
     @StateObject private var leaderboard = LeaderboardManager.shared
@@ -364,5 +366,13 @@ struct ToolbarButton: View {
                     }
                 }
         )
+    }
+}
+
+// MARK: - App Delegate
+/// 处理关闭窗口时退出应用（单窗口应用）
+class AppDelegate: NSObject, NSApplicationDelegate {
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        return true
     }
 }
