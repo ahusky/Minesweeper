@@ -4,7 +4,15 @@
   <img src="ScreenShot.png" alt="扫雷Lite" width="400">
 </p>
 
+<p align="center">
+  <a href="https://apps.apple.com/cn/app/%E6%89%AB%E9%9B%B7lite-%E7%BB%8F%E5%85%B8%E7%89%88/id6762319150?mt=12">
+    <img src="https://developer.apple.com/assets/elements/badges/download-on-the-mac-app-store.svg" alt="Download on the Mac App Store" height="50">
+  </a>
+</p>
+
 经典的 Windows 扫雷游戏 macOS 复刻版，使用 SwiftUI + AppKit 开发。
+
+> 📦 **[App Store 下载](https://apps.apple.com/cn/app/%E6%89%AB%E9%9B%B7lite-%E7%BB%8F%E5%85%B8%E7%89%88/id6762319150?mt=12)** | 免费 · 无广告 · 完全离线
 
 ## ✨ 功能特性
 
