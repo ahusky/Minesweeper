@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="https://apps.apple.com/cn/app/%E6%89%AB%E9%9B%B7lite-%E7%BB%8F%E5%85%B8%E7%89%88/id6762319150?mt=12">
-    <img src="https://developer.apple.com/assets/elements/badges/download-on-the-mac-app-store.svg" alt="Download on the Mac App Store" height="50">
+    <img src="https://tools.applemediaservices.com/api/badges/download-on-the-mac-app-store/black/en-us?size=250x83" alt="Download on the Mac App Store" height="50">
   </a>
 </p>
 
