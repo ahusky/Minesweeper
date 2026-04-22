@@ -85,6 +85,11 @@ Sources/
     └── HelpView.swift             # 帮助
 ```
 
-## 📜 许可证
+## � 联系方式
+
+- 邮箱: yuyang06@163.com
+- GitHub: https://github.com/ahusky/Minesweeper
+
+## �📜 许可证
 
 MIT License
