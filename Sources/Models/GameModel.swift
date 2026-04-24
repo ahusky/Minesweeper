@@ -2,10 +2,19 @@ import Foundation
 import Combine
 
 // MARK: - 难度等级
-enum Difficulty: String, CaseIterable {
-    case beginner = "初级"
-    case intermediate = "中级"
-    case expert = "高级"
+enum Difficulty: String, CaseIterable, Codable {
+    case beginner
+    case intermediate
+    case expert
+    
+    /// 本地化名称
+    var localizedName: String {
+        switch self {
+        case .beginner: return "difficulty.beginner".localized
+        case .intermediate: return "difficulty.intermediate".localized
+        case .expert: return "difficulty.expert".localized
+        }
+    }
 
     var rows: Int {
         switch self {

@@ -1,0 +1,156 @@
+/* 
+  Localizable.strings (English)
+  Minesweeper
+*/
+
+// MARK: - App
+"app.name" = "Minesweeper Lite";
+"app.help" = "Minesweeper Lite Help";
+
+// MARK: - Menu
+"menu.game" = "Game";
+"menu.newGame" = "New Game";
+"menu.statisticsCenter" = "Statistics Center...";
+"menu.mines" = "mines";
+
+// MARK: - Difficulty
+"difficulty.beginner" = "Beginner";
+"difficulty.intermediate" = "Intermediate";
+"difficulty.expert" = "Expert";
+
+// MARK: - Game State
+"state.ready" = "Ready";
+"state.playing" = "Playing...";
+"state.won" = "Victory!";
+"state.lost" = "Game Over";
+"state.newRecord" = "New Record!";
+"state.todayBest" = "Today's Best!";
+
+// MARK: - Window Title
+"title.ready" = "Minesweeper Lite - %@";
+"title.playing" = "Minesweeper Lite - Playing...";
+"title.won" = "Minesweeper Lite - 🎉 Victory! %@s";
+"title.wonRecord" = "Minesweeper Lite - 🏆 New Record! %@s";
+"title.wonToday" = "Minesweeper Lite - ⭐ Today's Best! %@s";
+"title.lost" = "Minesweeper Lite - 💥 Game Over";
+
+// MARK: - Stats Center
+"stats.title" = "Statistics Center";
+"stats.overview" = "Overview";
+"stats.leaderboard" = "Leaderboard";
+"stats.details" = "Details";
+"stats.resetData" = "Reset Data";
+"stats.done" = "Done";
+"stats.confirmReset" = "Confirm Reset";
+"stats.cancel" = "Cancel";
+"stats.reset" = "Reset";
+"stats.resetMessage" = "Are you sure you want to reset all data for【%@】? This includes statistics and leaderboard records. This action cannot be undone.";
+
+// MARK: - Stats Cards
+"stats.timeRecords" = "Time Records";
+"stats.todayBest" = "Today's Best";
+"stats.allTimeBest" = "All-Time Best";
+"stats.averageTime" = "Average Time";
+"stats.seconds" = "s";
+
+"stats.battleStats" = "Battle Statistics";
+"stats.todayRecord" = "Today";
+"stats.totalRecord" = "Total";
+"stats.winRate" = "Win Rate";
+
+"stats.streakRecords" = "Streak Records";
+"stats.currentStreak" = "Current Streak";
+"stats.longestWinStreak" = "Best Win Streak";
+"stats.longestLoseStreak" = "Worst Lose Streak";
+
+// MARK: - Leaderboard
+"leaderboard.today" = "Today";
+"leaderboard.allTime" = "All Time";
+"leaderboard.recent7Days" = "Last 7 Days";
+"leaderboard.todayRanking" = "Today's Ranking";
+"leaderboard.allTimeRanking" = "All-Time Ranking";
+"leaderboard.recent7DaysRanking" = "Last 7 Days Ranking";
+"leaderboard.records" = "%d records";
+"leaderboard.noRecords" = "No Records";
+"leaderboard.noRecordsHint" = "Complete a game to see records here";
+"leaderboard.rank1" = "1st Place";
+"leaderboard.rank2" = "2nd Place";
+"leaderboard.rank3" = "3rd Place";
+
+// MARK: - Details
+"details.totalGames" = "Total Games";
+"details.wins" = "Wins";
+"details.losses" = "Losses";
+"details.fastest" = "Fastest";
+"details.average" = "Average";
+"details.currentWinStreak" = "Current Streak";
+"details.bestWinStreak" = "Best Win Streak";
+"details.worstLoseStreak" = "Worst Lose Streak";
+"details.allDifficulties" = "All Difficulties Summary";
+"details.totalWins" = "Total Wins";
+"details.overallWinRate" = "Overall Win Rate";
+
+// MARK: - Celebration
+"celebration.newRecord" = "New Record!";
+"celebration.todayBest" = "Today's Best!";
+"celebration.newRecordSubtitle" = "You broke the all-time record!";
+"celebration.todayBestSubtitle" = "You set a new record for today!";
+
+// MARK: - Help
+"help.title" = "📖 Game Help";
+"help.basicRules" = "Basic Rules";
+"help.tips" = "Tips & Tricks";
+"help.shortcuts" = "Shortcuts";
+"help.close" = "Close";
+
+// Help - Basic Rules
+"help.objective" = "🎯 Objective";
+"help.objectiveText" = "Find and flag all hidden mines while revealing all safe cells.";
+"help.minesAndNumbers" = "💣 Mines & Numbers";
+"help.mineDesc" = "Mine - Click and it explodes, game over";
+"help.numberDesc" = "Number - Shows how many mines in the 8 surrounding cells";
+"help.emptyDesc" = "Empty - No mines nearby, auto-expands";
+"help.flagSystem" = "🚩 Flag System";
+"help.flagDesc" = "Flag - Mark when sure it's a mine";
+"help.questionDesc" = "Question - Mark when uncertain";
+"help.flagCycle" = "Right-click cycles: Hidden → 🚩 → ❓ → Hidden";
+"help.winCondition" = "🏆 Win Condition";
+"help.winConditionText" = "Reveal all non-mine cells to win. You don't need to flag all mines, just reveal all safe cells!";
+"help.firstClick" = "💡 First Click";
+"help.firstClickText" = "The first click and its surrounding 3×3 area are guaranteed mine-free for a safe start!";
+
+// Help - Tips
+"help.quickReveal" = "⚡ Quick Reveal";
+"help.quickRevealText" = "When the flags around a number equal that number, clicking it reveals all unflagged cells nearby.";
+"help.example" = "Example:";
+"help.number" = "Number";
+"help.quickRevealExample" = "3 flags around → click to reveal remaining cells";
+"help.quickRevealWarning" = "⚠️ Wrong flags may trigger a mine!";
+"help.autoFlag" = "🚩 Auto Flag";
+"help.autoFlagText" = "When unrevealed cells around a number equal that number, clicking it auto-flags those cells.";
+"help.autoFlagExample" = "Only 2 unrevealed cells left → auto-flag as 🚩";
+"help.mouseTips" = "🖱️ Mouse Tips";
+"help.leftClick" = "Left-click - Reveal / Quick reveal";
+"help.rightClick" = "Right-click - Cycle flags";
+"help.middleClick" = "Middle-click - Same as clicking a number";
+"help.strategyTips" = "🧠 Strategy Tips";
+"help.tip1" = "• Start analyzing from number 1";
+"help.tip2" = "• Pay attention to corners and edges";
+"help.tip3" = "• Cross-reference known information";
+"help.tip4" = "• Sometimes luck is needed for 50/50 guesses";
+
+// Help - Shortcuts
+"help.gameControl" = "🎮 Game Controls";
+"help.newGameShortcut" = "New Game";
+"help.difficultySwitch" = "🎚️ Difficulty";
+"help.beginnerShortcut" = "Beginner (9×9, 10 mines)";
+"help.intermediateShortcut" = "Intermediate (16×16, 40 mines)";
+"help.expertShortcut" = "Expert (30×16, 99 mines)";
+"help.other" = "📊 Other";
+"help.openStats" = "Open Statistics";
+"help.openHelp" = "Open Help";
+"help.closePopup" = "Close Popup";
+
+// MARK: - Toolbar
+"toolbar.help" = "Help (⌘?)";
+"toolbar.statistics" = "Statistics (⇧⌘S)";

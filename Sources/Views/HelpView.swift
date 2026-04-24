@@ -9,7 +9,7 @@ struct HelpView: View {
         VStack(spacing: 0) {
             // 标题栏
             HStack {
-                Text("📖 游戏帮助")
+                Text("help.title".localized)
                     .font(.headline)
                 Spacer()
                 Button(action: { dismiss() }) {
@@ -26,9 +26,9 @@ struct HelpView: View {
             
             // 标签选择
             Picker("", selection: $selectedTab) {
-                Text("基础玩法").tag(0)
-                Text("操作技巧").tag(1)
-                Text("快捷键").tag(2)
+                Text("help.basicRules".localized).tag(0)
+                Text("help.tips".localized).tag(1)
+                Text("help.shortcuts".localized).tag(2)
             }
             .pickerStyle(.segmented)
             .padding()
@@ -52,7 +52,7 @@ struct HelpView: View {
             // 底部按钮
             HStack {
                 Spacer()
-                Button("关闭") {
+                Button("help.close".localized) {
                     dismiss()
                 }
                 .keyboardShortcut(.escape)
@@ -65,35 +65,35 @@ struct HelpView: View {
     // MARK: - 基础玩法
     private var basicRulesView: some View {
         VStack(alignment: .leading, spacing: 16) {
-            HelpSection(title: "🎯 游戏目标", icon: "target") {
-                Text("找出并标记所有隐藏的地雷，同时揭开所有安全的格子。")
+            HelpSection(title: "help.objective".localized, icon: "target") {
+                Text("help.objectiveText".localized)
             }
             
-            HelpSection(title: "💣 地雷与数字", icon: "number.circle") {
+            HelpSection(title: "help.minesAndNumbers".localized, icon: "number.circle") {
                 VStack(alignment: .leading, spacing: 8) {
-                    HelpRow(symbol: "💣", text: "地雷 - 点到就会爆炸，游戏结束")
-                    HelpRow(symbol: "1️⃣", text: "数字 - 表示周围 8 格中有几个地雷")
-                    HelpRow(symbol: "⬜", text: "空白 - 周围没有地雷，会自动展开")
+                    HelpRow(symbol: "💣", text: "help.mineDesc".localized)
+                    HelpRow(symbol: "1️⃣", text: "help.numberDesc".localized)
+                    HelpRow(symbol: "⬜", text: "help.emptyDesc".localized)
                 }
             }
             
-            HelpSection(title: "🚩 标记系统", icon: "flag") {
+            HelpSection(title: "help.flagSystem".localized, icon: "flag") {
                 VStack(alignment: .leading, spacing: 8) {
-                    HelpRow(symbol: "🚩", text: "旗子 - 确定是地雷时插旗标记")
-                    HelpRow(symbol: "❓", text: "问号 - 不确定时可标记问号")
-                    Text("右键循环切换：隐藏 → 🚩 → ❓ → 隐藏")
+                    HelpRow(symbol: "🚩", text: "help.flagDesc".localized)
+                    HelpRow(symbol: "❓", text: "help.questionDesc".localized)
+                    Text("help.flagCycle".localized)
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .padding(.top, 4)
                 }
             }
             
-            HelpSection(title: "🏆 胜利条件", icon: "trophy") {
-                Text("揭开所有不是地雷的格子即可获胜。不需要标记所有地雷，只要安全格子全部揭开就赢了！")
+            HelpSection(title: "help.winCondition".localized, icon: "trophy") {
+                Text("help.winConditionText".localized)
             }
             
-            HelpSection(title: "💡 首次点击", icon: "hand.tap") {
-                Text("首次点击的位置及其周围 3×3 区域保证没有地雷，让你安全开局！")
+            HelpSection(title: "help.firstClick".localized, icon: "hand.tap") {
+                Text("help.firstClickText".localized)
             }
         }
         .padding()
@@ -102,14 +102,14 @@ struct HelpView: View {
     // MARK: - 操作技巧
     private var tipsView: some View {
         VStack(alignment: .leading, spacing: 16) {
-            HelpSection(title: "⚡ 快速揭开", icon: "bolt") {
+            HelpSection(title: "help.quickReveal".localized, icon: "bolt") {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("当一个数字周围已标记的旗子数等于该数字时，点击这个数字可以快速揭开周围所有未标记的格子。")
+                    Text("help.quickRevealText".localized)
                     
                     HStack(spacing: 4) {
-                        Text("示例：")
+                        Text("help.example".localized)
                             .foregroundColor(.secondary)
-                        Text("数字")
+                        Text("help.number".localized)
                             .padding(.horizontal, 6)
                             .padding(.vertical, 2)
                             .background(Color.blue.opacity(0.2))
@@ -117,25 +117,25 @@ struct HelpView: View {
                         Text("3")
                             .font(.system(.body, design: .monospaced).bold())
                             .foregroundColor(.red)
-                        Text("周围有 3 个 🚩 时，点击它会揭开剩余格子")
+                        Text("help.quickRevealExample".localized)
                             .foregroundColor(.secondary)
                     }
                     .font(.caption)
                     
-                    Text("⚠️ 如果旗子标错了，可能会踩雷！")
+                    Text("help.quickRevealWarning".localized)
                         .font(.caption)
                         .foregroundColor(.orange)
                 }
             }
             
-            HelpSection(title: "🚩 自动插旗", icon: "flag.badge.ellipsis") {
+            HelpSection(title: "help.autoFlag".localized, icon: "flag.badge.ellipsis") {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("当一个数字周围未揭开的格子数正好等于该数字时，点击这个数字会自动给这些格子插上旗子。")
+                    Text("help.autoFlagText".localized)
                     
                     HStack(spacing: 4) {
-                        Text("示例：")
+                        Text("help.example".localized)
                             .foregroundColor(.secondary)
-                        Text("数字")
+                        Text("help.number".localized)
                             .padding(.horizontal, 6)
                             .padding(.vertical, 2)
                             .background(Color.blue.opacity(0.2))
@@ -143,27 +143,27 @@ struct HelpView: View {
                         Text("2")
                             .font(.system(.body, design: .monospaced).bold())
                             .foregroundColor(.green)
-                        Text("周围只剩 2 个未揭开的格子 → 自动标记为 🚩")
+                        Text("help.autoFlagExample".localized)
                             .foregroundColor(.secondary)
                     }
                     .font(.caption)
                 }
             }
             
-            HelpSection(title: "🖱️ 鼠标技巧", icon: "computermouse") {
+            HelpSection(title: "help.mouseTips".localized, icon: "computermouse") {
                 VStack(alignment: .leading, spacing: 8) {
-                    HelpRow(symbol: "👆", text: "左键 - 揭开格子 / 快速揭开")
-                    HelpRow(symbol: "👇", text: "右键 - 循环切换标记")
-                    HelpRow(symbol: "🖲️", text: "中键 - 同左键点击数字的效果")
+                    HelpRow(symbol: "👆", text: "help.leftClick".localized)
+                    HelpRow(symbol: "👇", text: "help.rightClick".localized)
+                    HelpRow(symbol: "🖲️", text: "help.middleClick".localized)
                 }
             }
             
-            HelpSection(title: "🧠 推理技巧", icon: "brain") {
+            HelpSection(title: "help.strategyTips".localized, icon: "brain") {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("• 从数字 1 开始分析最容易")
-                    Text("• 注意角落和边缘的格子")
-                    Text("• 利用已知信息相互印证")
-                    Text("• 有时需要「二选一」的运气判断")
+                    Text("help.tip1".localized)
+                    Text("help.tip2".localized)
+                    Text("help.tip3".localized)
+                    Text("help.tip4".localized)
                 }
                 .font(.callout)
             }
@@ -174,26 +174,26 @@ struct HelpView: View {
     // MARK: - 快捷键
     private var shortcutsView: some View {
         VStack(alignment: .leading, spacing: 16) {
-            HelpSection(title: "🎮 游戏控制", icon: "gamecontroller") {
+            HelpSection(title: "help.gameControl".localized, icon: "gamecontroller") {
                 VStack(spacing: 8) {
-                    ShortcutRow(keys: ["⌘", "N"], description: "新游戏")
-                    ShortcutRow(keys: ["Space"], description: "新游戏")
+                    ShortcutRow(keys: ["⌘", "N"], description: "help.newGameShortcut".localized)
+                    ShortcutRow(keys: ["Space"], description: "help.newGameShortcut".localized)
                 }
             }
             
-            HelpSection(title: "🎚️ 难度切换", icon: "slider.horizontal.3") {
+            HelpSection(title: "help.difficultySwitch".localized, icon: "slider.horizontal.3") {
                 VStack(spacing: 8) {
-                    ShortcutRow(keys: ["⌘", "1"], description: "初级 (9×9, 10 雷)")
-                    ShortcutRow(keys: ["⌘", "2"], description: "中级 (16×16, 40 雷)")
-                    ShortcutRow(keys: ["⌘", "3"], description: "高级 (30×16, 99 雷)")
+                    ShortcutRow(keys: ["⌘", "1"], description: "help.beginnerShortcut".localized)
+                    ShortcutRow(keys: ["⌘", "2"], description: "help.intermediateShortcut".localized)
+                    ShortcutRow(keys: ["⌘", "3"], description: "help.expertShortcut".localized)
                 }
             }
             
-            HelpSection(title: "📊 其他", icon: "ellipsis.circle") {
+            HelpSection(title: "help.other".localized, icon: "ellipsis.circle") {
                 VStack(spacing: 8) {
-                    ShortcutRow(keys: ["⇧", "⌘", "S"], description: "打开统计面板")
-                    ShortcutRow(keys: ["⌘", "?"], description: "打开帮助")
-                    ShortcutRow(keys: ["Esc"], description: "关闭弹窗")
+                    ShortcutRow(keys: ["⇧", "⌘", "S"], description: "help.openStats".localized)
+                    ShortcutRow(keys: ["⌘", "?"], description: "help.openHelp".localized)
+                    ShortcutRow(keys: ["Esc"], description: "help.closePopup".localized)
                 }
             }
         }

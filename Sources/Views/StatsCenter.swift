@@ -10,10 +10,18 @@ struct StatsCenter: View {
     @State private var animateContent = false
     @Environment(\.dismiss) private var dismiss
     
-    enum StatsTab: String, CaseIterable {
-        case overview = "概览"
-        case leaderboard = "排行榜"
-        case details = "详细"
+    enum StatsTab: CaseIterable {
+        case overview
+        case leaderboard
+        case details
+        
+        var localizedName: String {
+            switch self {
+            case .overview: return "stats.overview".localized
+            case .leaderboard: return "stats.leaderboard".localized
+            case .details: return "stats.details".localized
+            }
+        }
         
         var icon: String {
             switch self {
@@ -82,14 +90,14 @@ struct StatsCenter: View {
                 animateContent = true
             }
         }
-        .alert("确认重置", isPresented: $showResetAlert) {
-            Button("取消", role: .cancel) { }
-            Button("重置", role: .destructive) {
+        .alert("stats.confirmReset".localized, isPresented: $showResetAlert) {
+            Button("stats.cancel".localized, role: .cancel) { }
+            Button("stats.reset".localized, role: .destructive) {
                 statistics.resetStats(for: selectedDifficulty)
                 leaderboard.clearRecords(for: selectedDifficulty)
             }
         } message: {
-            Text("确定要重置【\(selectedDifficulty.rawValue)】的所有数据吗？包括统计和排行榜记录，此操作不可撤销。")
+            Text("stats.resetMessage".localized(selectedDifficulty.localizedName))
         }
     }
     
@@ -104,7 +112,7 @@ struct StatsCenter: View {
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     ))
-                Text("统计中心")
+                Text("stats.title".localized)
                     .font(.headline)
             }
             Spacer()
@@ -165,7 +173,7 @@ struct StatsCenter: View {
             Button(action: { showResetAlert = true }) {
                 HStack(spacing: 4) {
                     Image(systemName: "trash")
-                    Text("重置数据")
+                    Text("stats.resetData".localized)
                 }
                 .font(.callout)
                 .foregroundColor(.red)
@@ -174,7 +182,7 @@ struct StatsCenter: View {
             
             Spacer()
             
-            Button("完成") {
+            Button("stats.done".localized) {
                 dismiss()
             }
             .buttonStyle(.borderedProminent)
@@ -191,13 +199,13 @@ struct StatsCenter: View {
         
         return VStack(spacing: 16) {
             // 时间记录卡片
-            StatsCard(title: "时间记录", icon: "clock.fill", iconColor: .blue) {
+            StatsCard(title: "stats.timeRecords".localized, icon: "clock.fill", iconColor: .blue) {
                 HStack(spacing: 0) {
                     StatCell(
                         emoji: "⭐",
                         value: todayStats.bestTime.map { String(format: "%.1f", $0) } ?? "--",
-                        unit: "秒",
-                        label: "今日最佳",
+                        unit: "stats.seconds".localized,
+                        label: "stats.todayBest".localized,
                         valueColor: .orange
                     )
                     
@@ -206,8 +214,8 @@ struct StatsCenter: View {
                     StatCell(
                         emoji: "🏆",
                         value: allTimeBest.map { String(format: "%.1f", $0) } ?? "--",
-                        unit: "秒",
-                        label: "历史最佳",
+                        unit: "stats.seconds".localized,
+                        label: "stats.allTimeBest".localized,
                         valueColor: .yellow
                     )
                     
@@ -216,21 +224,21 @@ struct StatsCenter: View {
                     StatCell(
                         emoji: "⏱️",
                         value: stats.averageTime.map { String(format: "%.1f", $0) } ?? "--",
-                        unit: "秒",
-                        label: "平均时间",
+                        unit: "stats.seconds".localized,
+                        label: "stats.averageTime".localized,
                         valueColor: .blue
                     )
                 }
             }
             
             // 战绩卡片
-            StatsCard(title: "战绩统计", icon: "gamecontroller.fill", iconColor: .green) {
+            StatsCard(title: "stats.battleStats".localized, icon: "gamecontroller.fill", iconColor: .green) {
                 HStack(spacing: 0) {
                     StatCell(
                         emoji: "📅",
                         value: "\(todayStats.won)/\(todayStats.played)",
                         unit: nil,
-                        label: "今日战绩",
+                        label: "stats.todayRecord".localized,
                         valueColor: .green
                     )
                     
@@ -240,7 +248,7 @@ struct StatsCenter: View {
                         emoji: "📊",
                         value: "\(stats.gamesWon)/\(stats.gamesPlayed)",
                         unit: nil,
-                        label: "总战绩",
+                        label: "stats.totalRecord".localized,
                         valueColor: .primary
                     )
                     
@@ -250,20 +258,20 @@ struct StatsCenter: View {
                         emoji: "📈",
                         value: String(format: "%.1f", stats.winRate),
                         unit: "%",
-                        label: "胜率",
+                        label: "stats.winRate".localized,
                         valueColor: stats.winRate >= 50 ? .green : .orange
                     )
                 }
             }
             
             // 连胜卡片
-            StatsCard(title: "连胜记录", icon: "flame.fill", iconColor: .orange) {
+            StatsCard(title: "stats.streakRecords".localized, icon: "flame.fill", iconColor: .orange) {
                 HStack(spacing: 0) {
                     StatCell(
                         emoji: "🔥",
                         value: "\(stats.currentWinStreak)",
                         unit: nil,
-                        label: "当前连胜",
+                        label: "stats.currentStreak".localized,
                         valueColor: stats.currentWinStreak > 0 ? .orange : .secondary
                     )
                     
@@ -273,7 +281,7 @@ struct StatsCenter: View {
                         emoji: "👑",
                         value: "\(stats.longestWinStreak)",
                         unit: nil,
-                        label: "最长连胜",
+                        label: "stats.longestWinStreak".localized,
                         valueColor: .yellow
                     )
                     
@@ -283,7 +291,7 @@ struct StatsCenter: View {
                         emoji: "💀",
                         value: "\(stats.longestLoseStreak)",
                         unit: nil,
-                        label: "最长连败",
+                        label: "stats.longestLoseStreak".localized,
                         valueColor: .gray
                     )
                 }
@@ -317,17 +325,17 @@ struct StatsCenter: View {
                 title: leaderboardTitle,
                 icon: "list.number",
                 iconColor: .purple,
-                trailingText: "\(records.count) 条记录"
+                trailingText: "leaderboard.records".localized(records.count)
             ) {
                 if records.isEmpty {
                     VStack(spacing: 12) {
                         Text("🏆")
                             .font(.system(size: 48))
                             .opacity(0.4)
-                        Text("暂无记录")
+                        Text("leaderboard.noRecords".localized)
                             .font(.headline)
                             .foregroundColor(.secondary)
-                        Text("完成游戏后将显示在这里")
+                        Text("leaderboard.noRecordsHint".localized)
                             .font(.caption)
                             .foregroundColor(.secondary.opacity(0.7))
                     }
@@ -354,9 +362,9 @@ struct StatsCenter: View {
     
     private var leaderboardTitle: String {
         switch leaderboardType {
-        case .today: return "今日排行"
-        case .allTime: return "历史排行"
-        case .recent7Days: return "近7天排行"
+        case .today: return "leaderboard.todayRanking".localized
+        case .allTime: return "leaderboard.allTimeRanking".localized
+        case .recent7Days: return "leaderboard.recent7DaysRanking".localized
         }
     }
     
@@ -386,53 +394,53 @@ struct StatsCenter: View {
         let stats = statistics.stats(for: difficulty)
         
         return StatsCard(
-            title: "\(difficulty.rawValue) (\(difficulty.cols)×\(difficulty.rows))",
+            title: "\(difficulty.localizedName) (\(difficulty.cols)×\(difficulty.rows))",
             icon: "square.grid.3x3.fill",
             iconColor: .indigo
         ) {
             VStack(spacing: 12) {
                 // 基础数据
                 HStack {
-                    DetailItem(icon: "gamecontroller", title: "总局数", value: "\(stats.gamesPlayed)")
+                    DetailItem(icon: "gamecontroller", title: "details.totalGames".localized, value: "\(stats.gamesPlayed)")
                     Spacer()
-                    DetailItem(icon: "checkmark.circle", title: "胜利", value: "\(stats.gamesWon)", color: .green)
+                    DetailItem(icon: "checkmark.circle", title: "details.wins".localized, value: "\(stats.gamesWon)", color: .green)
                     Spacer()
-                    DetailItem(icon: "xmark.circle", title: "失败", value: "\(stats.gamesLost)", color: .red)
+                    DetailItem(icon: "xmark.circle", title: "details.losses".localized, value: "\(stats.gamesLost)", color: .red)
                 }
                 
                 Divider()
                 
                 // 时间数据
                 HStack {
-                    DetailItem(icon: "bolt.fill", title: "最快", value: stats.bestTime.map { formatTime($0) } ?? "--", color: .orange)
+                    DetailItem(icon: "bolt.fill", title: "details.fastest".localized, value: stats.bestTime.map { formatTime($0) } ?? "--", color: .orange)
                     Spacer()
-                    DetailItem(icon: "clock", title: "平均", value: stats.averageTime.map { formatTime($0) } ?? "--")
+                    DetailItem(icon: "clock", title: "details.average".localized, value: stats.averageTime.map { formatTime($0) } ?? "--")
                     Spacer()
-                    DetailItem(icon: "percent", title: "胜率", value: String(format: "%.1f%%", stats.winRate))
+                    DetailItem(icon: "percent", title: "stats.winRate".localized, value: String(format: "%.1f%%", stats.winRate))
                 }
                 
                 Divider()
                 
                 // 连胜数据
                 HStack {
-                    DetailItem(icon: "flame", title: "当前连胜", value: "\(stats.currentWinStreak)", color: stats.currentWinStreak > 0 ? .orange : .secondary)
+                    DetailItem(icon: "flame", title: "details.currentWinStreak".localized, value: "\(stats.currentWinStreak)", color: stats.currentWinStreak > 0 ? .orange : .secondary)
                     Spacer()
-                    DetailItem(icon: "crown", title: "最长连胜", value: "\(stats.longestWinStreak)", color: .yellow)
+                    DetailItem(icon: "crown", title: "details.bestWinStreak".localized, value: "\(stats.longestWinStreak)", color: .yellow)
                     Spacer()
-                    DetailItem(icon: "hand.thumbsdown", title: "最长连败", value: "\(stats.longestLoseStreak)", color: .gray)
+                    DetailItem(icon: "hand.thumbsdown", title: "details.worstLoseStreak".localized, value: "\(stats.longestLoseStreak)", color: .gray)
                 }
             }
         }
     }
     
     private var overallStatsCard: some View {
-        StatsCard(title: "全部难度汇总", icon: "chart.bar.xaxis", iconColor: .teal) {
+        StatsCard(title: "details.allDifficulties".localized, icon: "chart.bar.xaxis", iconColor: .teal) {
             HStack {
-                DetailItem(icon: "sum", title: "总局数", value: "\(statistics.totalGamesPlayed)")
+                DetailItem(icon: "sum", title: "details.totalGames".localized, value: "\(statistics.totalGamesPlayed)")
                 Spacer()
-                DetailItem(icon: "trophy.fill", title: "总胜利", value: "\(statistics.totalGamesWon)", color: .green)
+                DetailItem(icon: "trophy.fill", title: "details.totalWins".localized, value: "\(statistics.totalGamesWon)", color: .green)
                 Spacer()
-                DetailItem(icon: "chart.pie", title: "总胜率", value: String(format: "%.1f%%", statistics.overallWinRate))
+                DetailItem(icon: "chart.pie", title: "details.overallWinRate".localized, value: String(format: "%.1f%%", statistics.overallWinRate))
             }
         }
     }
@@ -459,7 +467,7 @@ struct DifficultyChip: View {
     var body: some View {
         Button(action: action) {
             VStack(spacing: 2) {
-                Text(difficulty.rawValue)
+                Text(difficulty.localizedName)
                     .font(.system(size: 13, weight: isSelected ? .semibold : .regular))
                 Text("\(difficulty.cols)×\(difficulty.rows)")
                     .font(.system(size: 10))
@@ -495,7 +503,7 @@ struct TabButton: View {
             HStack(spacing: 6) {
                 Image(systemName: tab.icon)
                     .font(.system(size: 12))
-                Text(tab.rawValue)
+                Text(tab.localizedName)
                     .font(.system(size: 13, weight: isSelected ? .semibold : .regular))
             }
             .frame(maxWidth: .infinity)
@@ -532,12 +540,20 @@ struct LeaderboardTypeChip: View {
         }
     }
     
+    private var localizedName: String {
+        switch type {
+        case .today: return "leaderboard.today".localized
+        case .allTime: return "leaderboard.allTime".localized
+        case .recent7Days: return "leaderboard.recent7Days".localized
+        }
+    }
+    
     var body: some View {
         Button(action: action) {
             HStack(spacing: 4) {
                 Image(systemName: icon)
                     .font(.system(size: 11))
-                Text(type.rawValue)
+                Text(localizedName)
                     .font(.system(size: 12, weight: isSelected ? .semibold : .regular))
             }
             .padding(.horizontal, 12)
@@ -737,9 +753,9 @@ struct LeaderboardRow: View {
     
     private var rankLabel: String {
         switch rank {
-        case 1: return "第一名"
-        case 2: return "第二名"
-        case 3: return "第三名"
+        case 1: return "leaderboard.rank1".localized
+        case 2: return "leaderboard.rank2".localized
+        case 3: return "leaderboard.rank3".localized
         default: return ""
         }
     }
@@ -769,7 +785,7 @@ struct NewRecordCelebration: View {
                 }
             
             // 标题
-            Text(isNewAllTimeRecord ? "新纪录！" : "今日最佳！")
+            Text(isNewAllTimeRecord ? "celebration.newRecord".localized : "celebration.todayBest".localized)
                 .font(.title.bold())
                 .foregroundStyle(
                     isNewAllTimeRecord
@@ -781,14 +797,14 @@ struct NewRecordCelebration: View {
             HStack(spacing: 4) {
                 Text(String(format: "%.1f", time))
                     .font(.system(size: 48, weight: .bold, design: .rounded))
-                Text("秒")
+                Text("stats.seconds".localized)
                     .font(.title2)
                     .foregroundColor(.secondary)
                     .offset(y: 8)
             }
             
             // 副标题
-            Text(isNewAllTimeRecord ? "打破历史最佳记录！" : "创造今日新纪录！")
+            Text(isNewAllTimeRecord ? "celebration.newRecordSubtitle".localized : "celebration.todayBestSubtitle".localized)
                 .font(.callout)
                 .foregroundColor(.secondary)
         }

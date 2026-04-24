@@ -19,6 +19,7 @@ swiftc -parse-as-library \
     Sources/Views/StatsCenter.swift \
     Sources/Views/AppColors.swift \
     Sources/Views/HelpView.swift \
+    Sources/App/Localization.swift \
     Sources/App/MinesweeperApp.swift
 
 # 创建 .app bundle
@@ -27,6 +28,11 @@ rm -rf build
 mkdir -p "$APP_DIR/Contents/MacOS"
 mkdir -p "$APP_DIR/Contents/Resources"
 mv MinesweeperBinary "$APP_DIR/Contents/MacOS/Minesweeper"
+
+# 复制本地化资源
+echo "🌐 复制本地化资源..."
+cp -r Resources/en.lproj "$APP_DIR/Contents/Resources/"
+cp -r Resources/zh-Hans.lproj "$APP_DIR/Contents/Resources/"
 
 # 生成图标
 LOGO="Resources/logo.png"
@@ -65,9 +71,9 @@ cat > "$APP_DIR/Contents/Info.plist" << 'EOF'
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0</string>
+    <string>1.1.0</string>
     <key>CFBundleVersion</key>
-    <string>1</string>
+    <string>3</string>
     <key>LSMinimumSystemVersion</key>
     <string>14.0</string>
     <key>NSHighResolutionCapable</key>
@@ -76,6 +82,13 @@ cat > "$APP_DIR/Contents/Info.plist" << 'EOF'
     <string>AppIcon</string>
     <key>NSPrincipalClass</key>
     <string>NSApplication</string>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>zh-Hans</string>
+    <key>CFBundleLocalizations</key>
+    <array>
+        <string>en</string>
+        <string>zh-Hans</string>
+    </array>
 </dict>
 </plist>
 EOF

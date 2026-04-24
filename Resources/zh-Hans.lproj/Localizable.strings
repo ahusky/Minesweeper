@@ -1,0 +1,156 @@
+/* 
+  Localizable.strings (简体中文)
+  Minesweeper
+*/
+
+// MARK: - App
+"app.name" = "扫雷Lite";
+"app.help" = "扫雷Lite 帮助";
+
+// MARK: - Menu
+"menu.game" = "游戏";
+"menu.newGame" = "新游戏";
+"menu.statisticsCenter" = "统计中心...";
+"menu.mines" = "雷";
+
+// MARK: - Difficulty
+"difficulty.beginner" = "初级";
+"difficulty.intermediate" = "中级";
+"difficulty.expert" = "高级";
+
+// MARK: - Game State
+"state.ready" = "准备";
+"state.playing" = "游戏中...";
+"state.won" = "胜利!";
+"state.lost" = "失败";
+"state.newRecord" = "新纪录!";
+"state.todayBest" = "今日最佳!";
+
+// MARK: - Window Title
+"title.ready" = "扫雷Lite - %@";
+"title.playing" = "扫雷Lite - 游戏中...";
+"title.won" = "扫雷Lite - 🎉 胜利! %@s";
+"title.wonRecord" = "扫雷Lite - 🏆 新纪录! %@s";
+"title.wonToday" = "扫雷Lite - ⭐ 今日最佳! %@s";
+"title.lost" = "扫雷Lite - 💥 失败";
+
+// MARK: - Stats Center
+"stats.title" = "统计中心";
+"stats.overview" = "概览";
+"stats.leaderboard" = "排行榜";
+"stats.details" = "详细";
+"stats.resetData" = "重置数据";
+"stats.done" = "完成";
+"stats.confirmReset" = "确认重置";
+"stats.cancel" = "取消";
+"stats.reset" = "重置";
+"stats.resetMessage" = "确定要重置【%@】的所有数据吗？包括统计和排行榜记录，此操作不可撤销。";
+
+// MARK: - Stats Cards
+"stats.timeRecords" = "时间记录";
+"stats.todayBest" = "今日最佳";
+"stats.allTimeBest" = "历史最佳";
+"stats.averageTime" = "平均时间";
+"stats.seconds" = "秒";
+
+"stats.battleStats" = "战绩统计";
+"stats.todayRecord" = "今日战绩";
+"stats.totalRecord" = "总战绩";
+"stats.winRate" = "胜率";
+
+"stats.streakRecords" = "连胜记录";
+"stats.currentStreak" = "当前连胜";
+"stats.longestWinStreak" = "最长连胜";
+"stats.longestLoseStreak" = "最长连败";
+
+// MARK: - Leaderboard
+"leaderboard.today" = "今日";
+"leaderboard.allTime" = "历史";
+"leaderboard.recent7Days" = "近7天";
+"leaderboard.todayRanking" = "今日排行";
+"leaderboard.allTimeRanking" = "历史排行";
+"leaderboard.recent7DaysRanking" = "近7天排行";
+"leaderboard.records" = "%d 条记录";
+"leaderboard.noRecords" = "暂无记录";
+"leaderboard.noRecordsHint" = "完成游戏后将显示在这里";
+"leaderboard.rank1" = "第一名";
+"leaderboard.rank2" = "第二名";
+"leaderboard.rank3" = "第三名";
+
+// MARK: - Details
+"details.totalGames" = "总局数";
+"details.wins" = "胜利";
+"details.losses" = "失败";
+"details.fastest" = "最快";
+"details.average" = "平均";
+"details.currentWinStreak" = "当前连胜";
+"details.bestWinStreak" = "最长连胜";
+"details.worstLoseStreak" = "最长连败";
+"details.allDifficulties" = "全部难度汇总";
+"details.totalWins" = "总胜利";
+"details.overallWinRate" = "总胜率";
+
+// MARK: - Celebration
+"celebration.newRecord" = "新纪录！";
+"celebration.todayBest" = "今日最佳！";
+"celebration.newRecordSubtitle" = "打破历史最佳记录！";
+"celebration.todayBestSubtitle" = "创造今日新纪录！";
+
+// MARK: - Help
+"help.title" = "📖 游戏帮助";
+"help.basicRules" = "基础玩法";
+"help.tips" = "操作技巧";
+"help.shortcuts" = "快捷键";
+"help.close" = "关闭";
+
+// Help - Basic Rules
+"help.objective" = "🎯 游戏目标";
+"help.objectiveText" = "找出并标记所有隐藏的地雷，同时揭开所有安全的格子。";
+"help.minesAndNumbers" = "💣 地雷与数字";
+"help.mineDesc" = "地雷 - 点到就会爆炸，游戏结束";
+"help.numberDesc" = "数字 - 表示周围 8 格中有几个地雷";
+"help.emptyDesc" = "空白 - 周围没有地雷，会自动展开";
+"help.flagSystem" = "🚩 标记系统";
+"help.flagDesc" = "旗子 - 确定是地雷时插旗标记";
+"help.questionDesc" = "问号 - 不确定时可标记问号";
+"help.flagCycle" = "右键循环切换：隐藏 → 🚩 → ❓ → 隐藏";
+"help.winCondition" = "🏆 胜利条件";
+"help.winConditionText" = "揭开所有不是地雷的格子即可获胜。不需要标记所有地雷，只要安全格子全部揭开就赢了！";
+"help.firstClick" = "💡 首次点击";
+"help.firstClickText" = "首次点击的位置及其周围 3×3 区域保证没有地雷，让你安全开局！";
+
+// Help - Tips
+"help.quickReveal" = "⚡ 快速揭开";
+"help.quickRevealText" = "当一个数字周围已标记的旗子数等于该数字时，点击这个数字可以快速揭开周围所有未标记的格子。";
+"help.example" = "示例：";
+"help.number" = "数字";
+"help.quickRevealExample" = "周围有 3 个 🚩 时，点击它会揭开剩余格子";
+"help.quickRevealWarning" = "⚠️ 如果旗子标错了，可能会踩雷！";
+"help.autoFlag" = "🚩 自动插旗";
+"help.autoFlagText" = "当一个数字周围未揭开的格子数正好等于该数字时，点击这个数字会自动给这些格子插上旗子。";
+"help.autoFlagExample" = "周围只剩 2 个未揭开的格子 → 自动标记为 🚩";
+"help.mouseTips" = "🖱️ 鼠标技巧";
+"help.leftClick" = "左键 - 揭开格子 / 快速揭开";
+"help.rightClick" = "右键 - 循环切换标记";
+"help.middleClick" = "中键 - 同左键点击数字的效果";
+"help.strategyTips" = "🧠 推理技巧";
+"help.tip1" = "• 从数字 1 开始分析最容易";
+"help.tip2" = "• 注意角落和边缘的格子";
+"help.tip3" = "• 利用已知信息相互印证";
+"help.tip4" = "• 有时需要「二选一」的运气判断";
+
+// Help - Shortcuts
+"help.gameControl" = "🎮 游戏控制";
+"help.newGameShortcut" = "新游戏";
+"help.difficultySwitch" = "🎚️ 难度切换";
+"help.beginnerShortcut" = "初级 (9×9, 10 雷)";
+"help.intermediateShortcut" = "中级 (16×16, 40 雷)";
+"help.expertShortcut" = "高级 (30×16, 99 雷)";
+"help.other" = "📊 其他";
+"help.openStats" = "打开统计面板";
+"help.openHelp" = "打开帮助";
+"help.closePopup" = "关闭弹窗";
+
+// MARK: - Toolbar
+"toolbar.help" = "帮助 (⌘?)";
+"toolbar.statistics" = "统计 (⇧⌘S)";

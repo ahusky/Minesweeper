@@ -26,13 +26,13 @@ struct MinesweeperApp: App {
             CommandGroup(replacing: .newItem) { }
             
             // 游戏菜单
-            CommandMenu("Game") {
-                Button("New Game") {
+            CommandMenu("menu.game".localized) {
+                Button("menu.newGame".localized) {
                     game.newGame()
                 }
                 .keyboardShortcut("n", modifiers: .command)
                 
-                Button("New Game") {
+                Button("menu.newGame".localized) {
                     game.newGame()
                 }
                 .keyboardShortcut(.space, modifiers: [])
@@ -44,14 +44,14 @@ struct MinesweeperApp: App {
                         game.changeDifficulty(difficulty)
                     } label: {
                         let checkmark = game.difficulty == difficulty ? "✓ " : "   "
-                        Text("\(checkmark)\(difficulty.rawValue) (\(difficulty.cols)×\(difficulty.rows), \(difficulty.mines) mines)")
+                        Text("\(checkmark)\(difficulty.localizedName) (\(difficulty.cols)×\(difficulty.rows), \(difficulty.mines) \("menu.mines".localized))")
                     }
                     .keyboardShortcut(KeyEquivalent(Character("\(index + 1)")), modifiers: .command)
                 }
                 
                 Divider()
                 
-                Button("Statistics Center...") {
+                Button("menu.statisticsCenter".localized) {
                     showStatsCenter = true
                 }
                 .keyboardShortcut("s", modifiers: [.command, .shift])
@@ -59,7 +59,7 @@ struct MinesweeperApp: App {
             
             // 帮助菜单
             CommandGroup(replacing: .help) {
-                Button("扫雷Lite 帮助") {
+                Button("app.help".localized) {
                     showHelp = true
                 }
                 .keyboardShortcut("?", modifiers: .command)
@@ -86,21 +86,22 @@ struct MainGameView: View {
     }
 
     private var windowTitle: String {
+        let appName = "app.name".localized
         switch game.gameState {
         case .ready:
-            return "扫雷Lite - \(game.difficulty.rawValue)"
+            return "\(appName) - \(game.difficulty.localizedName)"
         case .playing:
-            return "扫雷Lite - 游戏中..."
+            return "\(appName) - " + "state.playing".localized
         case .won:
             let timeStr = String(format: "%.1f", game.elapsedTime)
             if game.isNewAllTimeRecord {
-                return "扫雷Lite - 🏆 新纪录! \(timeStr)s"
+                return "\(appName) - 🏆 " + "state.newRecord".localized + " \(timeStr)s"
             } else if game.isNewTodayRecord {
-                return "扫雷Lite - ⭐ 今日最佳! \(timeStr)s"
+                return "\(appName) - ⭐ " + "state.todayBest".localized + " \(timeStr)s"
             }
-            return "扫雷Lite - 🎉 胜利! \(timeStr)s"
+            return "\(appName) - 🎉 " + "state.won".localized + " \(timeStr)s"
         case .lost:
-            return "扫雷Lite - 💥 失败"
+            return "\(appName) - 💥 " + "state.lost".localized
         }
     }
 
@@ -157,7 +158,7 @@ struct MainGameView: View {
                 withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
                     showRecordCelebration = true
                 }
-                // 3秒后自动关闭
+                // 5秒后自动关闭
                 DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                     withAnimation {
                         showRecordCelebration = false
@@ -218,14 +219,14 @@ struct MainGameView: View {
             HStack(spacing: 2) {
                 ToolbarButton(
                     icon: "questionmark.circle",
-                    helpText: "Help (⌘?)"
+                    helpText: "toolbar.help".localized
                 ) {
                     showHelp = true
                 }
                 
                 ToolbarButton(
                     icon: "chart.bar.fill",
-                    helpText: "Statistics (⇧⌘S)"
+                    helpText: "toolbar.statistics".localized
                 ) {
                     showStatsCenter = true
                 }
@@ -276,7 +277,7 @@ struct GameDifficultyButton: View {
                     .font(.system(size: 10))
                 
                 VStack(alignment: .leading, spacing: 0) {
-                    Text(difficulty.rawValue)
+                    Text(difficulty.localizedName)
                         .font(.system(size: 11, weight: isSelected ? .semibold : .regular))
                     Text("\(difficulty.cols)×\(difficulty.rows)")
                         .font(.system(size: 9))
