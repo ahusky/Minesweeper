@@ -7,6 +7,7 @@ struct MinesweeperApp: App {
     @StateObject private var game = GameModel(difficulty: .beginner)
     @StateObject private var statistics = GameStatistics.shared
     @StateObject private var leaderboard = LeaderboardManager.shared
+    @StateObject private var languageManager = LanguageManager.shared
     @State private var showStatsCenter = false
     @State private var showHelp = false
 
@@ -64,6 +65,18 @@ struct MinesweeperApp: App {
                 }
                 .keyboardShortcut("?", modifiers: .command)
             }
+            
+            // 语言菜单
+            CommandMenu("Language") {
+                ForEach(LanguageManager.AppLanguage.allCases, id: \.self) { language in
+                    Button {
+                        languageManager.currentLanguage = language
+                    } label: {
+                        let checkmark = languageManager.currentLanguage == language ? "✓ " : "   "
+                        Text("\(checkmark)\(language.flag) \(language.displayName)")
+                    }
+                }
+            }
         }
     }
 }
@@ -73,11 +86,13 @@ struct MainGameView: View {
     @ObservedObject var game: GameModel
     @ObservedObject var statistics: GameStatistics
     @ObservedObject var leaderboard: LeaderboardManager
+    @ObservedObject var languageManager = LanguageManager.shared
     @Binding var showStatsCenter: Bool
     @Binding var showHelp: Bool
     
     @State private var showRecordCelebration = false
     @State private var boardScale: CGFloat = 1.0
+    @State private var refreshID = UUID()
     
     private let cellSize: CGFloat = 28
     
@@ -188,6 +203,11 @@ struct MainGameView: View {
         }
         .sheet(isPresented: $showHelp) {
             HelpView()
+        }
+        .id(refreshID)
+        .onChange(of: languageManager.currentLanguage) { _, _ in
+            // 语言切换时刷新视图
+            refreshID = UUID()
         }
     }
     

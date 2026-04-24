@@ -1,15 +1,85 @@
 import Foundation
+import SwiftUI
+
+// MARK: - 语言管理器
+class LanguageManager: ObservableObject {
+    static let shared = LanguageManager()
+    
+    @Published var currentLanguage: AppLanguage {
+        didSet {
+            UserDefaults.standard.set(currentLanguage.rawValue, forKey: "AppLanguage")
+            updateBundle()
+        }
+    }
+    
+    private(set) var bundle: Bundle = .main
+    
+    enum AppLanguage: String, CaseIterable {
+        case system = "system"
+        case english = "en"
+        case chinese = "zh-Hans"
+        
+        var displayName: String {
+            switch self {
+            case .system: return "Auto"
+            case .english: return "English"
+            case .chinese: return "中文"
+            }
+        }
+        
+        var flag: String {
+            switch self {
+            case .system: return "🌐"
+            case .english: return "🇺🇸"
+            case .chinese: return "🇨🇳"
+            }
+        }
+    }
+    
+    private init() {
+        let saved = UserDefaults.standard.string(forKey: "AppLanguage") ?? "system"
+        self.currentLanguage = AppLanguage(rawValue: saved) ?? .system
+        updateBundle()
+    }
+    
+    private func updateBundle() {
+        let languageCode: String
+        
+        if currentLanguage == .system {
+            // 使用系统语言
+            languageCode = Locale.preferredLanguages.first?.components(separatedBy: "-").first ?? "en"
+        } else {
+            languageCode = currentLanguage.rawValue
+        }
+        
+        // 查找对应的语言资源
+        if let path = Bundle.main.path(forResource: languageCode, ofType: "lproj"),
+           let bundle = Bundle(path: path) {
+            self.bundle = bundle
+        } else if let path = Bundle.main.path(forResource: "en", ofType: "lproj"),
+                  let bundle = Bundle(path: path) {
+            // 默认使用英文
+            self.bundle = bundle
+        } else {
+            self.bundle = .main
+        }
+    }
+    
+    func localizedString(for key: String) -> String {
+        bundle.localizedString(forKey: key, value: nil, table: nil)
+    }
+}
 
 // MARK: - Localization Helper
 extension String {
     /// 获取本地化字符串
     var localized: String {
-        Bundle.main.localizedString(forKey: self, value: nil, table: nil)
+        LanguageManager.shared.localizedString(for: self)
     }
     
     /// 获取带参数的本地化字符串
     func localized(_ args: CVarArg...) -> String {
-        String(format: Bundle.main.localizedString(forKey: self, value: nil, table: nil), arguments: args)
+        String(format: LanguageManager.shared.localizedString(for: self), arguments: args)
     }
 }
 
